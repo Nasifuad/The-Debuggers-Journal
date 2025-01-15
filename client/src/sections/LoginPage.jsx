@@ -7,6 +7,8 @@ const LoginPage = () => {
   const [isPasswordError, setIsPasswordError] = useState(false);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [error, seterror] = useState(false);
+  const [success, setsuccess] = useState(false);
 
   const handleNameChange = (e) => {
     e.preventDefault();
@@ -17,9 +19,33 @@ const LoginPage = () => {
     e.preventDefault();
     name.length < 6 ? setIsNameError(true) : setIsNameError(false);
     password.length < 6 ? setIsPasswordError(true) : setIsPasswordError(false);
+
+    handleLogin();
     setName("");
     setPassword("");
-    navigate("/");
+  };
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: name, password }),
+      });
+      const data = await response.json();
+      if (data.message === "Login successful") {
+        setsuccess(!success);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } else {
+        seterror(!error);
+      }
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <>
@@ -75,6 +101,17 @@ const LoginPage = () => {
             {isPasswordError && (
               <p className="text-red-500 font-bold text-sm">
                 Password must be at least 6 characters
+              </p>
+            )}
+            <br />
+            {error && (
+              <p className="font-semibold text-sm text-red-600">
+                Invalid username or password
+              </p>
+            )}
+            {success && (
+              <p className="font-semibold text-sm text-green-600">
+                Login successful
               </p>
             )}
             <br />

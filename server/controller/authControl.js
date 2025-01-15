@@ -24,8 +24,22 @@ export const signup = async (req, res) => {
     const userData = req.body;
     const createUser = await User.create(userData);
     res.json({ data: userData, user: createUser });
+  } catch (error) {
+    res.json({ error: "An internal server error occurred" });
+  }
+};
 
-    // res.status(201).json({ message: "User created successfully" });
+export const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    console.log("Userfrom", username, password);
+    const user = await User.findOne({ username, password });
+    console.log(user);
+    if (user) {
+      res.json({ message: "Login successful" });
+    } else {
+      res.json({ error: "Invalid username or password" });
+    }
   } catch (error) {
     res.json({ error: "An internal server error occurred" });
   }
