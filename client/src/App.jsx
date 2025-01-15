@@ -1,28 +1,29 @@
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from "react-router-dom";
-import Layout from "./rooot/Layout";
-import Homepage from "./sections/Homepage";
-import BlogPage from "./sections/BlogPage";
-import LoginPage from "./sections/LoginPage";
-import Signup from "./sections/Signup";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router/route";
+import { MyContext } from "./useContext/UseContext";
+import { useState } from "react";
 
 const App = () => {
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Homepage />} />
-        <Route path="/add" element={<BlogPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path={"*"} element={<h1>404</h1>} />
-      </Route>
-    )
+  const [globalData, setGlobalData] = useState([
+    {
+      id: 1,
+      name: "Rajat",
+    },
+    {
+      id: 2,
+      name: "Rajat",
+    },
+    {
+      id: 3,
+      name: "Rajat",
+    },
+  ]);
+  console.log("from app", globalData);
+  return (
+    <MyContext.Provider value={{ globalData, setGlobalData }}>
+      <RouterProvider router={router} />
+    </MyContext.Provider>
   );
-  return <RouterProvider router={router} />;
 };
 
 export default App;

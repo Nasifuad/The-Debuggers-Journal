@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { images } from "../constants/constant";
 import { useNavigate } from "react-router-dom";
+// import { MyContext } from "../useContext/UseContext";
 const Signup = () => {
   const navigate = useNavigate();
   const [isNameError, setIsNameError] = useState(false);
   const [isPasswordError, setIsPasswordError] = useState(false);
-  const [name, setName] = useState("");
+  const [username, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  // const [userData, setUserData] = useState([]);
 
   const handleNameChange = (e) => {
     e.preventDefault();
@@ -17,11 +19,45 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    name.length < 6 ? setIsNameError(true) : setIsNameError(false);
-    password.length < 6 ? setIsPasswordError(true) : setIsPasswordError(false);
+
+    // Validate inputs
+    const isNameValid = username.length >= 6;
+    const isPasswordValid = password.length >= 6;
+
+    setIsNameError(!isNameValid);
+    setIsPasswordError(!isPasswordValid);
+
+    if (!isNameValid || !isPasswordValid) {
+      return; // Stop execution if validation fails
+    }
+
+    const newUserData = { username, email, password };
+
+    // Call postData with the constructed object instead of relying on state
+    postData(newUserData);
+
+    // Reset form fields
     setName("");
+    setEmail("");
     setPassword("");
+    setPasswordConfirm("");
     navigate("/");
+  };
+
+  const postData = async (data) => {
+    try {
+      const res = await fetch("http://localhost:3000/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const data1 = await res.json();
+      console.log(data1);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -41,19 +77,19 @@ const Signup = () => {
             className="flex flex-col w-1/2"
             onSubmit={(e) => handleSubmit(e)}
           >
-            <label htmlFor="email" className="font-semibold pb-2">
+            <label htmlFor="name" className="font-semibold pb-2">
               Username:
             </label>
             <input
               type="text"
-              id="email"
-              name="email"
+              id="name"
+              name="name"
               placeholder="Username"
               autoComplete="false"
               required
-              value={name}
+              value={username}
               onChange={(e) => handleNameChange(e)}
-              className="p-2 border border-gray-300 rounded-md outline-none text-gray-500"
+              className="p-2 border border-gray-300 rounded-md outline-none text-gray-500 capitalize font-semibold"
             />
             {isNameError && (
               <p className="text-red-500 font-bold text-sm">
@@ -95,13 +131,13 @@ const Signup = () => {
               </p>
             )}
             <br />
-            <label htmlFor="password" className="font-semibold pb-2">
+            <label htmlFor="passwordConfirm" className="font-semibold pb-2">
               Confirm Password:
             </label>
             <input
               type="password"
-              id="password"
-              name="password"
+              id="passwordConfirm"
+              name="passwordConfirm"
               required
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
