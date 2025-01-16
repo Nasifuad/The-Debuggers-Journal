@@ -4,23 +4,9 @@ import { MyContext } from "./useContext/UseContext";
 import { useState } from "react";
 
 const App = () => {
-  const [globalData, setGlobalData] = useState([
-    {
-      id: 1,
-      name: "Rajat",
-    },
-    {
-      id: 2,
-      name: "Rajat",
-    },
-    {
-      id: 3,
-      name: "Rajat",
-    },
-  ]);
-  console.log("from app", globalData);
+  const [currentUser, setCurrentUser] = useState("Guest123");
   return (
-    <MyContext.Provider value={{ globalData, setGlobalData }}>
+    <MyContext.Provider value={{ currentUser, setCurrentUser }}>
       <RouterProvider router={router} />
     </MyContext.Provider>
   );

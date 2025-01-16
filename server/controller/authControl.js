@@ -36,7 +36,7 @@ export const login = async (req, res) => {
     const user = await User.findOne({ username, password });
     console.log(user);
     if (user) {
-      res.json({ message: "Login successful" });
+      res.json({ message: "Login successful", data: user });
     } else {
       res.json({ error: "Invalid username or password" });
     }

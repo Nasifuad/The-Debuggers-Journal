@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { images } from "../constants/constant";
 import { useNavigate } from "react-router-dom";
+import { MyContext } from "../useContext/UseContext";
 const LoginPage = () => {
+  const { currentUser, setCurrentUser } = useContext(MyContext);
+  console.log(currentUser);
   const navigate = useNavigate();
   const [isNameError, setIsNameError] = useState(false);
   const [isPasswordError, setIsPasswordError] = useState(false);
@@ -34,6 +37,8 @@ const LoginPage = () => {
         body: JSON.stringify({ username: name, password }),
       });
       const data = await response.json();
+      console.log(data);
+      setCurrentUser(data.message);
       if (data.message === "Login successful") {
         setsuccess(!success);
         setTimeout(() => {
