@@ -22,10 +22,15 @@ export const createBlog = async (req, res) => {
 export const signup = async (req, res) => {
   try {
     const userData = req.body;
+    const checkUser = await User.findOne({ username: userData.username });
+
+    if (checkUser) {
+      res.json({ error: "User already exists" });
+    }
     const createUser = await User.create(userData);
     res.json({ data: userData, user: createUser });
   } catch (error) {
-    res.json({ error: "An internal server error occurred" });
+    res.json({ error: "Error From authControl JS", error });
   }
 };
 
