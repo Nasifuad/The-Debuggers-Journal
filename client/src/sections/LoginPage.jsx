@@ -3,8 +3,7 @@ import { images } from "../constants/constant";
 import { useNavigate } from "react-router-dom";
 import { MyContext } from "../useContext/UseContext";
 const LoginPage = () => {
-  const { currentUser, setCurrentUser } = useContext(MyContext);
-  console.log(currentUser);
+  const { setIsLoggedIn, setCurrentUser } = useContext(MyContext);
   const navigate = useNavigate();
   const [isNameError, setIsNameError] = useState(false);
   const [isPasswordError, setIsPasswordError] = useState(false);
@@ -12,23 +11,29 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [error, seterror] = useState(false);
   const [success, setsuccess] = useState(false);
-
-  const handleNameChange = (e) => {
-    e.preventDefault();
-    setName(e.target.value);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    name.length < 6 ? setIsNameError(true) : setIsNameError(false);
-    password.length < 6 ? setIsPasswordError(true) : setIsPasswordError(false);
 
+    // Validate name and password
+    setIsNameError(name.length < 6);
+    setIsPasswordError(password.length < 6);
+
+    // If there is any error, stop further processing
+    if (isNameError || isPasswordError) {
+      return;
+    }
+
+    // If validation passes, handle login
     handleLogin();
+
+    // Clear inputs
     setName("");
     setPassword("");
   };
+
   const handleLogin = async () => {
     try {
+      console.log("Clicked");
       const response = await fetch("http://localhost:3000/login", {
         method: "POST",
         headers: {
@@ -38,20 +43,68 @@ const LoginPage = () => {
       });
       const data = await response.json();
       console.log(data);
+
       setCurrentUser(data.message);
+
       if (data.message === "Login successful") {
         setsuccess(!success);
+        setCurrentUser(data.data.username);
+        setIsLoggedIn(true);
+        localStorage.setItem("currentUser", data.data.username);
+        localStorage.setItem("isLoggedIn", JSON.stringify(true));
         setTimeout(() => {
           navigate("/");
         }, 2000);
       } else {
         seterror(!error);
       }
-      console.log(data);
     } catch (error) {
       console.error(error);
     }
   };
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   name.length < 6 ? setIsNameError(!isNameError) : setIsNameError(false);
+  //   password.length < 6
+  //     ? setIsPasswordError(!isPasswordError)
+  //     : setIsPasswordError(false);
+  //   if (!isNameError || !isPasswordError) {
+  //     return;
+  //   }
+  //   const newUserData = { username: name, password };
+  //   handleLogin(newUserData);
+  //   setName("");
+  //   setPassword("");
+  // };
+  // const handleLogin = async (newUserData) => {
+  //   const { username, password } = newUserData;
+  //   try {
+  //     console.log("Clicked");
+  //     const response = await fetch("http://localhost:3000/login", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ username, password }),
+  //     });
+  //     const data = await response.json();
+  //     console.log(data);
+  //     setCurrentUser(data.message);
+  //     if (data.message === "Login successful") {
+  //       setsuccess(!success);
+  //       setCurrentUser(data.data.username);
+  //       setTimeout(() => {
+  //         navigate("/");
+  //       }, 2000);
+  //     } else {
+  //       seterror(!error);
+  //     }
+  //     console.log(data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   return (
     <>
       <h1 className="text-4xl font-mono flex justify-center items-center mt-10 ">
@@ -81,7 +134,7 @@ const LoginPage = () => {
               autoComplete="false"
               required
               value={name}
-              onChange={(e) => handleNameChange(e)}
+              onChange={(e) => setName(e.target.value)}
               className="p-2 border border-gray-300 rounded-md outline-none text-gray-500"
             />
             {isNameError && (

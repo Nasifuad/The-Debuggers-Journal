@@ -6,6 +6,6 @@ export const JoiValidatorSignup = (schema) => async (req, res, next) => {
     req.body = parsedBody;
     next();
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 };

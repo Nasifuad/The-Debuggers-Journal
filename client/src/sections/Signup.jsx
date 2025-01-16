@@ -1,82 +1,91 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { images } from "../constants/constant";
 import { useNavigate } from "react-router-dom";
-// import { MyContext } from "../useContext/UseContext";
+import { MyContext } from "../useContext/UseContext";
+
 const Signup = () => {
   const navigate = useNavigate();
   const [isNameError, setIsNameError] = useState(false);
   const [isPasswordError, setIsPasswordError] = useState(false);
+  const [isConfirmPasswordError, setIsConfirmPasswordError] = useState(false);
   const [username, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  // const [userData, setUserData] = useState([]);
-
+  const [userExits, setUserExits] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const { currentUser, setCurrentUser, setIsLoggedIn } = useContext(MyContext);
   const handleNameChange = (e) => {
     e.preventDefault();
     setName(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate inputs
     const isNameValid = username.length >= 6;
     const isPasswordValid = password.length >= 6;
+    const isPasswordsMatch = password === passwordConfirm;
 
+    // Update error states
     setIsNameError(!isNameValid);
     setIsPasswordError(!isPasswordValid);
+    setIsConfirmPasswordError(!isPasswordsMatch);
 
-    if (!isNameValid || !isPasswordValid) {
-      return; // Stop execution if validation fails
+    // If validation fails, stop execution
+    if (!isNameValid || !isPasswordValid || !isPasswordsMatch) {
+      return;
     }
 
     const newUserData = { username, email, password };
 
-    // Call postData with the constructed object instead of relying on state
-    postData(newUserData);
-
-    // Reset form fields
-    setName("");
-    setEmail("");
-    setPassword("");
-    setPasswordConfirm("");
-    navigate("/");
-  };
-
-  const postData = async (data) => {
     try {
       const res = await fetch("http://localhost:3000/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(newUserData),
       });
-      const data1 = await res.json();
-      console.log(data1);
+
+      const result = await res.json();
+      console.log(result);
+
+      if (result.message === "User created successfully") {
+        setSuccess(true);
+        console.log(currentUser);
+        setCurrentUser(result.data.username);
+        console.log(result.data.username);
+        console.log(currentUser);
+        setIsLoggedIn(true);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } else {
+        setUserExits(true);
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Error:", error);
+      // setUserExits(!userExits);
     }
   };
+
   return (
     <>
-      <h1 className="text-4xl font-mono flex justify-center items-center mt-10 ">
-        Welcome to the {"  "}
+      <h1 className="text-4xl font-mono flex justify-center items-center mt-10">
+        Welcome to the{" "}
         <span className="ml-2 text-white font-bold bg-emerald-600 p-2 rounded-lg shadow-xl">
           SignUp Page
         </span>
       </h1>
-      <div className="w-full flex justify-center items-center ">
+      <div className="w-full flex justify-center items-center">
         <div>
-          <img src={images.signup} alt="login" className="w-[500px]" />
+          <img src={images.signup} alt="Sign up" className="w-[500px]" />
         </div>
 
-        <div className=" w-1/2 h-[500px] flex justify-center items-center flex-col">
-          <form
-            className="flex flex-col w-1/2"
-            onSubmit={(e) => handleSubmit(e)}
-          >
+        <div className="w-1/2 h-[500px] flex justify-center items-center flex-col">
+          <form className="flex flex-col w-1/2" onSubmit={handleSubmit}>
             <label htmlFor="name" className="font-semibold pb-2">
               Username:
             </label>
@@ -85,10 +94,10 @@ const Signup = () => {
               id="name"
               name="name"
               placeholder="Username"
-              autoComplete="false"
+              autoComplete="off"
               required
               value={username}
-              onChange={(e) => handleNameChange(e)}
+              onChange={handleNameChange}
               className="p-2 border border-gray-300 rounded-md outline-none text-gray-500 capitalize font-semibold"
             />
             {isNameError && (
@@ -97,6 +106,7 @@ const Signup = () => {
               </p>
             )}
             <br />
+
             <label htmlFor="email" className="font-semibold pb-2">
               Email:
             </label>
@@ -104,7 +114,7 @@ const Signup = () => {
               type="email"
               id="email"
               name="email"
-              autoComplete="false"
+              autoComplete="off"
               placeholder="Email"
               required
               value={email}
@@ -112,6 +122,7 @@ const Signup = () => {
               className="p-2 border border-gray-300 rounded-md outline-none text-gray-500"
             />
             <br />
+
             <label htmlFor="password" className="font-semibold pb-2">
               Password:
             </label>
@@ -131,6 +142,7 @@ const Signup = () => {
               </p>
             )}
             <br />
+
             <label htmlFor="passwordConfirm" className="font-semibold pb-2">
               Confirm Password:
             </label>
@@ -144,8 +156,13 @@ const Signup = () => {
               placeholder="Confirm Password"
               className="p-2 border border-gray-300 rounded-md outline-none"
             />
-
+            {isConfirmPasswordError && (
+              <p className="text-red-500 font-bold text-sm">
+                Passwords do not match
+              </p>
+            )}
             <br />
+
             <button
               type="submit"
               className="bg-blue-900 px-4 py-2 text-white rounded-md hover:bg-blue-800 font-mono"
@@ -153,9 +170,20 @@ const Signup = () => {
               Sign Up
             </button>
           </form>
+          {userExits && (
+            <p className="text-red-500 font-bold text-sm">
+              User already exists
+            </p>
+          )}
+          {success && (
+            <p className="text-green-500 font-bold text-sm">
+              User created successfully
+            </p>
+          )}
+
           <button
-            type="submit"
-            className=" px-4 py-2 text-black rounded-md font-mono"
+            type="button"
+            className="px-4 py-2 text-black rounded-md font-mono"
             onClick={() => navigate("/login")}
           >
             Already have an account?
