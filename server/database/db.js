@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 const URI = process.env.MONGO_URI;
 // "mongodb+srv://nasifuad007:nasif123@journal.3pezu.mongodb.net/Journal?retryWrites=true&w=majority&appName=Journal";
 console.log("URI", process.env.MONGO_URI);
+console.log("URI", process.env.SECRET_KEY);
 
 export const connectDB = async () => {
   try {
