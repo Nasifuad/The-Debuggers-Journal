@@ -5,7 +5,6 @@ import { FaUserCircle } from "react-icons/fa";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../useContext/UseContext";
 const Navbar = () => {
-  // eslint-disable-next-line no-unused-vars
   const { currentUser, isLoggedIn } = useContext(MyContext);
   const [userName, setuserName] = useState("Guest");
   const [logged, setLogged] = useState(false);
@@ -22,7 +21,7 @@ const Navbar = () => {
   };
   return (
     <>
-      <header className="sticky top-0  border-b border-gray-200 bg-white ">
+      <header className="sticky top-0  border-b border-gray-200 bg-white z-50">
         <div className=" absolute top-5 left-5 flex gap-2 justify-center items-center">
           <FaUserCircle className="text-2xl" />
           <span className="text-lg font-semibold">{userName}</span>

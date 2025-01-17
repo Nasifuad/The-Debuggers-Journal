@@ -7,7 +7,7 @@ export const images = {
 };
 export const navigation = [
   { name: "Home", to: "/" },
-  { name: "Add Blog", to: "add" },
-  { name: "See Blogs", to: "blogs" },
+  { name: "Todays Blog", to: "blog" },
+  { name: "Create Blog", to: "add" },
   { name: "About", to: "about" },
 ];

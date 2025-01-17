@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 // import dotenv from "dotenv";
-// export const result = dotenv.config();
+// export const result = dotenv.config()data;
 // console.log(result);
 const URI = process.env.MONGO_URI;
 // "mongodb+srv://nasifuad007:nasif123@journal.3pezu.mongodb.net/Journal?retryWrites=true&w=majority&appName=Journal";
