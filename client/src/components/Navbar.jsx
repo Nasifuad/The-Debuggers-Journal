@@ -21,7 +21,7 @@ const Navbar = () => {
   };
   return (
     <>
-      <header className="sticky top-0  border-b border-gray-200 bg-white z-50">
+      <header className="sticky top-0  border-b border-gray-200 bg-white z-50 rounded">
         <div className=" absolute top-5 left-5 flex gap-2 justify-center items-center">
           <FaUserCircle className="text-2xl" />
           <span className="text-lg font-semibold">{userName}</span>
