@@ -11,7 +11,7 @@ const SideMenu = ({ navigation }) => {
   return (
     <>
       <SlMenu
-        className="absolute xl:hidden lg:hidden  top-5 right-5 text-3xl"
+        className="absolute z-50 xl:hidden lg:hidden  top-5 right-5 text-3xl"
         onClick={() => setToggle(!toggle)}
       />
       {toggle && (

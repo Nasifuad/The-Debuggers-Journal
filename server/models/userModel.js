@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-
+import jwt from "jsonwebtoken";
 const userShcema = new Schema({
   username: {
     type: String,
@@ -19,5 +19,7 @@ const userShcema = new Schema({
     required: false,
   },
 });
-
+userShcema.methods.getToken = function () {
+  return jwt.sign({ id: this._id }, process.env.SECRET_KEY);
+};
 export const User = model("User", userShcema);

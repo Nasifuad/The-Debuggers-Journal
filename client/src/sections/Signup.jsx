@@ -15,20 +15,14 @@ const Signup = () => {
   const [userExits, setUserExits] = useState(false);
   const [success, setSuccess] = useState(false);
   const { currentUser, setCurrentUser, setIsLoggedIn } = useContext(MyContext);
-  const handleNameChange = (e) => {
-    e.preventDefault();
-    setName(e.target.value);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate inputs
     const isNameValid = username.length >= 6;
     const isPasswordValid = password.length >= 6;
     const isPasswordsMatch = password === passwordConfirm;
 
-    // Update error states
     setIsNameError(!isNameValid);
     setIsPasswordError(!isPasswordValid);
     setIsConfirmPasswordError(!isPasswordsMatch);
@@ -67,7 +61,6 @@ const Signup = () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      // setUserExits(!userExits);
     }
   };
 
@@ -97,7 +90,7 @@ const Signup = () => {
               autoComplete="off"
               required
               value={username}
-              onChange={handleNameChange}
+              onChange={(e) => setName(e.target.value)}
               className="p-2 border border-gray-300 rounded-md outline-none text-gray-500 capitalize font-semibold"
             />
             {isNameError && (

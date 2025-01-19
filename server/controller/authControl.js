@@ -32,6 +32,7 @@ export const signup = async (req, res, next) => {
       message: "User created successfully",
       data: userData,
       user: createUser,
+      token: await createUser.getToken(),
     });
   } catch (error) {
     // res.json({ error: "Error From authControl JS", error });
@@ -53,5 +54,24 @@ export const login = async (req, res, next) => {
   } catch (error) {
     // res.json({ error: "An internal server error occurred" });
     next(error);
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  try {
+    const { username } = req.body; // Destructure username from the request body
+    if (!username) {
+      return res.status(400).json({ error: "Username is required" });
+    }
+    const user = await User.findOne({ username });
+    console.log("user", user);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const deletedBlog = await Blog.findOneAndDelete({ username });
+
+    res.json({ message: "user is deleted", user: user });
+  } catch (error) {
+    next(error); // Pass the error to the error-handling middleware
   }
 };
