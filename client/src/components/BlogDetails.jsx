@@ -6,18 +6,20 @@ const BlogDetails = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  console.log(id);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `https://jsonplaceholder.typicode.com/posts/${id}`
-        );
+        const response = await fetch("http://localhost:3000/blogs");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
-        const data = await response.json();
-        setData(data);
+        const datas = await response.json();
+        console.log("data is ", datas);
+        setData(datas.find((item) => item._id === id));
+        console.log("data is again", data);
+        // setData(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -26,15 +28,9 @@ const BlogDetails = () => {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-  const [time, setTime] = useState();
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date().toLocaleString());
-      console.log("time", new Date().toLocaleString());
-    }, 1000);
-    return () => clearInterval(interval);
-  });
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -55,14 +51,14 @@ const BlogDetails = () => {
         </div>
         <div className="flex gap-2">
           <p className="text-gray-400">Reading at</p>
-          {time}
+          {Date()}
         </div>
       </div>
       <div
         className="mt-4
       capitalize text-2xl font-bold"
       >
-        {data && data.body}
+        {data && data.content}
       </div>
     </div>
   );

@@ -23,3 +23,33 @@ export const joiUserSchemaSignup = Joi.object({
     "any.required": "Password is a required field.",
   }),
 }).unknown(true);
+
+export const joiBlogShcema = Joi.object({
+  title: Joi.string().min(3).max(30).required().messages({
+    "string.base": "Title should be a string.",
+    "string.empty": "Title is required.",
+    "string.min": "Title must be at least 3 characters.",
+    "string.max": "Title cannot exceed 30 characters.",
+    "any.required": "Title is a required field.",
+  }),
+  author: Joi.string().min(3).max(30).required().messages({
+    "string.base": "Author name should be a string.",
+    "string.empty": "Author name is required.",
+    "string.min": "Author name must be at least 3 characters.",
+    "string.max": "Author name cannot exceed 30 characters.",
+    "any.required": "Author name is a required field.",
+  }),
+  keyword: Joi.string().min(3).max(30).required().messages({
+    "string.base": "Keyword should be a string.",
+    "string.empty": "Keyword is required.",
+    "string.min": "Keyword must be at least 3 characters.",
+    "string.max": "Keyword cannot exceed 30 characters.",
+    "any.required": "Keyword is a required field.",
+  }),
+  content: Joi.string().min(3).required().messages({
+    "string.base": "Content should be a string.",
+    "string.empty": "Content is required.",
+    "string.min": "Content must be at least 3 characters.",
+    "any.required": "Content is a required field.",
+  }),
+}).unknown(true);

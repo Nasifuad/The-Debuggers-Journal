@@ -9,15 +9,6 @@ export const homepage = async (req, res, next) => {
     next(error);
   }
 };
-export const createBlog = async (req, res, next) => {
-  try {
-    const blogData = req.body;
-    const createBlog = await Blog.create(blogData);
-    res.json({ data: blogData, blog: createBlog });
-  } catch (error) {
-    next(error);
-  }
-};
 
 export const signup = async (req, res, next) => {
   try {
@@ -73,5 +64,26 @@ export const deleteUser = async (req, res, next) => {
     res.json({ message: "user is deleted", user: user });
   } catch (error) {
     next(error); // Pass the error to the error-handling middleware
+  }
+};
+export const getBlogs = async (req, res, next) => {
+  try {
+    const blogData = await Blog.find();
+    res.json(blogData);
+  } catch (error) {
+    next(error);
+  }
+};
+export const createBlog = async (req, res, next) => {
+  try {
+    const blogData = req.body;
+    const checkExists = await Blog.findOne({ title: blogData.title });
+    if (checkExists) {
+      return res.json({ message: "Blog already exists" });
+    }
+    const createBlog = await Blog.create(blogData);
+    res.json({ data: blogData, blog: createBlog });
+  } catch (error) {
+    next(error);
   }
 };
