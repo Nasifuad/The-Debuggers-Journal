@@ -1,24 +1,60 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-
+import { useQuery } from "@tanstack/react-query";
 const BlogPage = () => {
   const [dataBlog, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         "https://jsonplaceholder.typicode.com/posts"
+  //       );
+  //       const data = await response.json();
+  //       setData(data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+  // const demo = useQuery({
+  //   queryKey: ["blogs"],
+  //   queryFn: async () => {
+  //     fetch("https://jsonplaceholder.typicode.com/posts")
+  //       .then((response) => response.json())
+  //       .then((data) => console.log(data));
+  //   },
+  // });
+  // console.log("demo", demo.data);
+  useQuery({
+    queryKey: ["blog"],
+    queryFn: async () => {
       try {
         const response = await fetch(
           "https://jsonplaceholder.typicode.com/posts"
         );
         const data = await response.json();
-        setData(data);
+        setTimeout(() => {
+          setData(data);
+          setIsLoading(false);
+        }, 1000);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    };
-    fetchData();
-  }, []);
+    },
+  });
 
+  if (isLoading)
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-600 py-10">
+        <h1 className="text-5xl text-white  z-50 font-bold text-center mb-12 sticky top-[89px] bg-gradient-to-br from-gray-900 to-gray-600 p-10">
+          {" "}
+          Loading...
+        </h1>
+      </div>
+    );
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-600 py-10 ">
       <div className="container mx-auto px-4">
