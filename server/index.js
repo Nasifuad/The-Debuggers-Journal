@@ -33,3 +33,4 @@ app.use(errorMiddleware);
     process.exit(1); // Exit process if DB connection fails
   }
 })();
+export default app;
