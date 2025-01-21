@@ -36,7 +36,7 @@ const Signup = () => {
 
     try {
       const res = await fetch(
-        "https://the-debuggers-journal-e2f6.vercel.app/signup",
+        "https://the-debuggers-journal-backend.onrender.com/signup",
         {
           method: "POST",
           headers: {

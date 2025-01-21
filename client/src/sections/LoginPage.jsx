@@ -35,7 +35,7 @@ const LoginPage = () => {
     try {
       console.log("Clicked");
       const response = await fetch(
-        "https://the-debuggers-journal-e2f6.vercel.app/login",
+        "https://the-debuggers-journal-backend.onrender.com/login",
         {
           method: "POST",
           headers: {

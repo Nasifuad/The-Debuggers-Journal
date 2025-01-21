@@ -31,7 +31,9 @@ const BlogPage = () => {
     queryKey: ["blogs"],
     queryFn: async () => {
       try {
-        const response = await fetch("http://localhost:3000/blogs");
+        const response = await fetch(
+          "https://the-debuggers-journal-backend.onrender.com/blogs"
+        );
         const data = await response.json();
         console.log(data);
         setTimeout(() => {

@@ -19,7 +19,7 @@ const CreateBlog = () => {
   };
   const sendBlog = async () => {
     const res = await fetch(
-      "https://the-debuggers-journal-e2f6.vercel.app/createBlog",
+      "https://the-debuggers-journal-backend.onrender.com/createBlog",
       {
         method: "POST",
         headers: {
