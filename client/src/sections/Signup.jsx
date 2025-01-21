@@ -35,13 +35,16 @@ const Signup = () => {
     const newUserData = { username, email, password };
 
     try {
-      const res = await fetch("http://localhost:3000/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newUserData),
-      });
+      const res = await fetch(
+        "https://the-debuggers-journal-e2f6.vercel.app/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newUserData),
+        }
+      );
 
       const result = await res.json();
       console.log(result);

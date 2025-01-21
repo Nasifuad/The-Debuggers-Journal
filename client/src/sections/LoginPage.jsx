@@ -34,13 +34,16 @@ const LoginPage = () => {
   const handleLogin = async () => {
     try {
       console.log("Clicked");
-      const response = await fetch("http://localhost:3000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username: name, password }),
-      });
+      const response = await fetch(
+        "https://the-debuggers-journal-e2f6.vercel.app/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: name, password }),
+        }
+      );
       const data = await response.json();
       console.log(data);
 

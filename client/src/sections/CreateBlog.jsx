@@ -18,13 +18,16 @@ const CreateBlog = () => {
     setBlogData({ ...blogData, [name]: value });
   };
   const sendBlog = async () => {
-    const res = await fetch("http://localhost:3000/createBlog", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(blogData),
-    });
+    const res = await fetch(
+      "https://the-debuggers-journal-e2f6.vercel.app/createBlog",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(blogData),
+      }
+    );
     const result = await res.json();
     console.log("result from server is ", result);
     setBlogData({
