@@ -36,7 +36,7 @@ const Signup = () => {
 
     try {
       const res = await fetch(
-        "https://the-debuggers-journal-backend.onrender.com/signup",
+        "https://the-debuggers-journal-backend.onrender.com/api/signup",
         {
           method: "POST",
           headers: {

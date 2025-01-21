@@ -12,7 +12,10 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/", router);
+app.use("/api", router);
+app.route("/").get((req, res) => {
+  res.status(200).json({ message: "Welcome to Debugger's Journal API" });
+});
 
 // Catch-all for invalid paths
 app.use((req, res, next) => {
