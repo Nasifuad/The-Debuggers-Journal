@@ -32,7 +32,7 @@ const BlogPage = () => {
     queryFn: async () => {
       try {
         const response = await fetch(
-          "https://the-debuggers-journal-backend.onrender.com/blogs"
+          "https://the-debuggers-journal-backend.onrender.com/api/blogs"
         );
         const data = await response.json();
         console.log(data);

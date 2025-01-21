@@ -12,7 +12,7 @@ const BlogDetails = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://the-debuggers-journal-backend.onrender.com/blogs"
+          "https://the-debuggers-journal-backend.onrender.com/api/blogs"
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
