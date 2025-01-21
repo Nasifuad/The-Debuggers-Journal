@@ -3,16 +3,16 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import Layout from "../rooot/Layout";
-import Homepage from "../sections/Homepage";
-import BlogPage from "../sections/BlogPage";
-import LoginPage from "../sections/LoginPage";
-import Signup from "../sections/Signup";
-import Profile from "../sections/Profile";
-import BlogDetails from "../components/BlogDetails";
-import Blogs from "../sections/Blogs";
-import CreateBlog from "../sections/CreateBlog";
-import About from "../sections/About";
+import Layout from "../../rooot/Layout";
+import Homepage from "../Homepage";
+import BlogPage from "../BlogPage";
+import LoginPage from "../LoginPage";
+import Signup from "../Signup";
+import Profile from "../Profile";
+import BlogDetails from "../../components/BlogDetails";
+import Blogs from "../Blogs";
+import CreateBlog from "../CreateBlog";
+import About from "../About";
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
