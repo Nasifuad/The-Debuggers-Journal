@@ -11,7 +11,9 @@ const BlogDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/blogs");
+        const response = await fetch(
+          "https://the-debuggers-journal.vercel.app/blogs"
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }

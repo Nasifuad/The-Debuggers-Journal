@@ -32,7 +32,7 @@ const BlogPage = () => {
     queryFn: async () => {
       try {
         const response = await fetch(
-          "https://the-debuggers-journal-e2f6.vercel.app/blogs"
+          "https://the-debuggers-journal.vercel.app/blogs"
         );
         const data = await response.json();
         console.log(data);
