@@ -1,5 +1,5 @@
 import { RouterProvider } from "react-router-dom";
-import { router } from "./router/route";
+import { router } from "./sections/router/route";
 import { MyContext } from "./useContext/UseContext";
 import { useState, useEffect } from "react";
 
