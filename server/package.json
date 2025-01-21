@@ -1,15 +1,23 @@
 {
-  "name": "client",
+  "name": "debuggers-journal-backend",
   "version": "1.0.0",
+  "description": "Backend server for Debugger's Journal using Express and MongoDB",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "express",
+    "mongodb",
+    "backend",
+    "api"
+  ],
+  "author": "Nasif Fuad",
+  "license": "MIT",
   "type": "module",
-  "description": "",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -17,7 +25,11 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
-    "nodemon": "^3.1.9",
     "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "eslint": "^8.49.0",
+    "prettier": "^3.0.0"
   }
 }
