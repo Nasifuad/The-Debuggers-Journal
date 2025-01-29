@@ -5,62 +5,47 @@ import { MyContext } from "../useContext/UseContext";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [isNameError, setIsNameError] = useState(false);
-  const [isPasswordError, setIsPasswordError] = useState(false);
-  const [isConfirmPasswordError, setIsConfirmPasswordError] = useState(false);
-  const [username, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [userExits, setUserExits] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [userExists, setUserExists] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { currentUser, setCurrentUser, setIsLoggedIn } = useContext(MyContext);
+  const { setCurrentUser, setIsLoggedIn } = useContext(MyContext);
+
+  const validateForm = () => {
+    let newErrors = {};
+    if (username.length < 6) newErrors.username = "Username must be at least 6 characters.";
+    if (password.length < 6) newErrors.password = "Password must be at least 6 characters.";
+    if (password !== passwordConfirm) newErrors.passwordConfirm = "Passwords do not match.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const isNameValid = username.length >= 6;
-    const isPasswordValid = password.length >= 6;
-    const isPasswordsMatch = password === passwordConfirm;
-
-    setIsNameError(!isNameValid);
-    setIsPasswordError(!isPasswordValid);
-    setIsConfirmPasswordError(!isPasswordsMatch);
-
-    // If validation fails, stop execution
-    if (!isNameValid || !isPasswordValid || !isPasswordsMatch) {
-      return;
-    }
+    if (!validateForm()) return;
 
     const newUserData = { username, email, password };
-
     try {
       const res = await fetch(
         "https://the-debuggers-journal-backend.onrender.com/api/signup",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newUserData),
         }
       );
-
       const result = await res.json();
-      console.log(result);
 
       if (result.message === "User created successfully") {
         setSuccess(true);
-        console.log(currentUser);
         setCurrentUser(result.data.username);
-        console.log(result.data.username);
-        console.log(currentUser);
         setIsLoggedIn(true);
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+        setTimeout(() => navigate("/"), 2000);
       } else {
-        setUserExits(true);
+        setUserExists(true);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -68,125 +53,39 @@ const Signup = () => {
   };
 
   return (
-    <>
-      <h1 className="text-4xl font-mono flex justify-center items-center mt-10">
-        Welcome to the{" "}
-        <span className="ml-2 text-white font-bold bg-emerald-600 p-2 rounded-lg shadow-xl">
-          SignUp Page
-        </span>
-      </h1>
-      <div className="w-full flex justify-center items-center">
-        <div>
-          <img src={images.signup} alt="Sign up" className="w-[500px]" />
-        </div>
-
-        <div className="w-1/2 h-[500px] flex justify-center items-center flex-col">
-          <form className="flex flex-col w-1/2" onSubmit={handleSubmit}>
-            <label htmlFor="name" className="font-semibold pb-2">
-              Username:
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Username"
-              autoComplete="off"
-              required
-              value={username}
-              onChange={(e) => setName(e.target.value)}
-              className="p-2 border border-gray-300 rounded-md outline-none text-gray-500 capitalize font-semibold"
-            />
-            {isNameError && (
-              <p className="text-red-500 font-bold text-sm">
-                Username must be at least 6 characters
-              </p>
-            )}
-            <br />
-
-            <label htmlFor="email" className="font-semibold pb-2">
-              Email:
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              autoComplete="off"
-              placeholder="Email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="p-2 border border-gray-300 rounded-md outline-none text-gray-500"
-            />
-            <br />
-
-            <label htmlFor="password" className="font-semibold pb-2">
-              Password:
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="p-2 border border-gray-300 rounded-md outline-none"
-            />
-            {isPasswordError && (
-              <p className="text-red-500 font-bold text-sm">
-                Password must be at least 6 characters
-              </p>
-            )}
-            <br />
-
-            <label htmlFor="passwordConfirm" className="font-semibold pb-2">
-              Confirm Password:
-            </label>
-            <input
-              type="password"
-              id="passwordConfirm"
-              name="passwordConfirm"
-              required
-              value={passwordConfirm}
-              onChange={(e) => setPasswordConfirm(e.target.value)}
-              placeholder="Confirm Password"
-              className="p-2 border border-gray-300 rounded-md outline-none"
-            />
-            {isConfirmPasswordError && (
-              <p className="text-red-500 font-bold text-sm">
-                Passwords do not match
-              </p>
-            )}
-            <br />
-
-            <button
-              type="submit"
-              className="bg-blue-900 px-4 py-2 text-white rounded-md hover:bg-blue-800 font-mono"
-            >
-              Sign Up
-            </button>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+      <h1 className="text-4xl font-semibold text-gray-800 mb-6">Sign Up</h1>
+      <div className="bg-white shadow-lg rounded-lg flex overflow-hidden w-full max-w-4xl">
+        <img src={images.signup} alt="Sign up" className="w-1/2 hidden md:block object-cover" />
+        <div className="w-full md:w-1/2 p-8">
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div>
+              <label className="block text-gray-700 font-medium">Username</label>
+              <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full p-2 border rounded-md" placeholder="Enter username" required />
+              {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
+            </div>
+            <div>
+              <label className="block text-gray-700 font-medium">Email</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 border rounded-md" placeholder="Enter email" required />
+            </div>
+            <div>
+              <label className="block text-gray-700 font-medium">Password</label>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-2 border rounded-md" placeholder="Enter password" required />
+              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+            </div>
+            <div>
+              <label className="block text-gray-700 font-medium">Confirm Password</label>
+              <input type="password" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} className="w-full p-2 border rounded-md" placeholder="Confirm password" required />
+              {errors.passwordConfirm && <p className="text-red-500 text-sm">{errors.passwordConfirm}</p>}
+            </div>
+            <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">Sign Up</button>
           </form>
-          {userExits && (
-            <p className="text-red-500 font-bold text-sm">
-              User already exists
-            </p>
-          )}
-          {success && (
-            <p className="text-green-500 font-bold text-sm">
-              User created successfully
-            </p>
-          )}
-
-          <button
-            type="button"
-            className="px-4 py-2 text-black rounded-md font-mono"
-            onClick={() => navigate("/login")}
-          >
-            Already have an account?
-          </button>
+          {userExists && <p className="text-red-500 text-sm mt-2">User already exists</p>}
+          {success && <p className="text-green-500 text-sm mt-2">User created successfully</p>}
+          <button onClick={() => navigate("/login")} className="mt-4 text-blue-600 hover:underline">Already have an account? Log in</button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
