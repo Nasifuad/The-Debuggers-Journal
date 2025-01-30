@@ -10,47 +10,77 @@ const SideMenu = ({ navigation }) => {
 
   return (
     <>
-      <SlMenu
-        className="absolute z-50 xl:hidden lg:hidden  top-5 right-5 text-3xl"
+      {/* Menu Toggle Button */}
+      <button
+        aria-label="Open Menu"
+        className="xl:hidden lg:hidden fixed top-5 right-5 text-3xl z-40 text-gray-900 hover:text-gray-300 transition-colors duration-200"
         onClick={() => setToggle(!toggle)}
-      />
+      >
+        {!toggle && <SlMenu />}
+      </button>
+
+      {/* Side Menu Overlay */}
       {toggle && (
-        <div className="xl:hidden lock absolute top-0 right-0 w-1/3 h-full bg-gray-200 z-50">
-          <RxCross2
-            className="absolute top-5 right-5 text-3xl"
-            onClick={() => setToggle(!toggle)}
-          />
-          <ul className="flex flex-col gap-5 p-5 mt-10">
-            {navigation.map((link) => (
-              <li key={link.name}>
-                <NavLink
-                  to={link.to}
-                  onClick={() => setToggle(!toggle)}
-                  className="text-2xl font-semibold capitalize opacity-90 hover:opacity-100 cursor-pointer"
-                >
-                  {link.name}
-                </NavLink>
-              </li>
-            ))}
-            <li className="flex gap-5 flex-wrap">
+        <div
+          className="fixed inset-0 bg-black/10 backdrop-blur-3xl z-40 h-screen"
+          onClick={() => setToggle(false)}
+        ></div>
+      )}
+
+      {/* Side Menu Content */}
+      <div
+        className={`fixed top-0 right-0 h-screen bg-black/40 w-64 backdrop-blur-lg   z-50 transform transition-transform duration-300 ease-in-out ${
+          toggle ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        {/* Close Button */}
+        <button
+          aria-label="Close Menu"
+          className="absolute top-5 right-5 text-3xl text-gray-100 hover:text-gray-300 transition-colors duration-200"
+          onClick={() => setToggle(false)}
+        >
+          <RxCross2 />
+        </button>
+
+        {/* Navigation Links */}
+        <ul className="flex flex-col gap-6 p-6 mt-16">
+          {navigation.map((link) => (
+            <li key={link.name}>
+              <NavLink
+                to={link.to}
+                onClick={() => setToggle(false)}
+                className={({ isActive }) =>
+                  `text-2xl font-semibold capitalize text-gray-100 hover:text-blue-400 transition-colors duration-200 ${
+                    isActive ? "text-blue-400" : ""
+                  }`
+                }
+              >
+                {link.name}
+              </NavLink>
+            </li>
+          ))}
+          <li>
+            <div className="flex gap-4">
               <NavLink
                 to="/login"
-                onClick={() => setToggle(!toggle)}
-                className="text-2xl bg-black text-white p-2 rounded-md font-semibold capitalize opacity-90 hover:opacity-100 cursor-pointer"
+                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-md hover:shadow-lg transition-all duration-300"
+                onClick={() => setToggle(false)}
               >
-                Login
+                Log In
               </NavLink>
               <NavLink
                 to="/signup"
-                onClick={() => setToggle(!toggle)}
-                className="text-2xl bg-black text-white p-2 rounded-md font-semibold capitalize opacity-90 hover:opacity-100 cursor-pointer"
+                className="px-4 py-2 border border-white/20 text-white rounded-md hover:bg-white/5 transition-all duration-300"
+                onClick={() => setToggle(false)}
               >
                 Sign Up
               </NavLink>
-            </li>
-          </ul>
-        </div>
-      )}
+            </div>
+          </li>
+        </ul>
+
+        {/* Auth Buttons */}
+      </div>
     </>
   );
 };

@@ -110,7 +110,7 @@ const LoginPage = () => {
   // };
   return (
     <>
-      <h1 className="text-4xl font-mono flex justify-center items-center mt-10 ">
+      <h1 className="text-4xl font-mono flex justify-center items-center  mt-10 ">
         Welcome to the {"  "}
         <span className="ml-2 text-white font-bold bg-blue-900 p-2 rounded-lg shadow-xl">
           Login Page

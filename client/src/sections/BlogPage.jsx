@@ -2,7 +2,11 @@ import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 const BlogPage = () => {
-  const { data: blogs, isLoading, error } = useQuery({
+  const {
+    data: blogs,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["blogs"],
     queryFn: async () => {
       const response = await fetch(
@@ -15,54 +19,98 @@ const BlogPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-600">
-        <h1 className="text-5xl text-white font-bold animate-pulse">Loading...</h1>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900">
+        <div className="w-24 h-24 border-4 border-white/20 border-t-blue-400 rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-red-400 text-2xl">
-        Error fetching blogs. Please try again later.
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-blue-200 animate-pulse">
+        <div className="text-red-300 text-xl p-8 border border-red-300/30 rounded-lg backdrop-blur-sm">
+          ⚠️ Error fetching blogs. Please try again later.
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-600 py-10">
-      <div className="container mx-auto px-4">
-        <h1 className="text-5xl text-white font-bold text-center mb-12 sticky top-[89px] bg-gradient-to-br from-gray-900 to-gray-600 p-10">
-          Today's Blogs
+    <div className=" bg-gradient-to-br  from-blue-900 via-gray-900 to-sky-600 text-white py-10 px-4">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-6xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 animate-text-shine sticky top-10 z-10 py-8 backdrop-blur-lg">
+          The Debuggers Journal
         </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {blogs.map((item) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {blogs.map((item, index) => (
             <div
               key={item._id}
-              className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300"
+              className="group relative overflow-hidden rounded-2xl bg-gray-800/30 backdrop-blur-lg border border-white/10 hover:border-blue-400/30 transition-all duration-300 ease-out hover:shadow-2xl hover:-translate-y-2"
+              style={{
+                animation: `cardEntrance ${
+                  500 + index * 100
+                }ms ease-out forwards`,
+                opacity: 0,
+                transform: "translateY(20px)",
+              }}
             >
-              <NavLink
-                to={`/blog/${item._id}`}
-                className="text-2xl font-semibold text-white hover:text-gray-400 transition duration-300 capitalize"
-              >
-                {item.title.length > 20 ? `${item.title.slice(0, 20)}...` : item.title || "No Title"}
-              </NavLink>
-
-              <p className="mt-3 text-gray-300 capitalize">
-                {item.content.length > 100 ? `${item.content.slice(0, 100)}...` : item.content || "No Content"}
-              </p>
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
               <NavLink
                 to={`/blog/${item._id}`}
-                className="text-gray-500 hover:text-gray-300 mt-4 block transition duration-200"
+                className="flex flex-col h-full p-6"
               >
-                Read more →
+                <h3 className="text-2xl font-semibold text-gray-100 mb-3 group-hover:text-cyan-400 transition-colors duration-300">
+                  {item.title || "Untitled Journey"}
+                  <span className="absolute inset-0 z-10"></span>
+                </h3>
+
+                <div className="relative flex-1">
+                  <p className="text-gray-400/80 text-lg leading-relaxed line-clamp-3 group-hover:line-clamp-5 transition-all duration-500">
+                    {item.content || "Let's explore the unknown together..."}
+                  </p>
+                  <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-gray-800/90 via-gray-800/30 to-transparent group-hover:opacity-0 transition-opacity duration-300"></div>
+                </div>
+
+                <div className="mt-6 flex items-center text-blue-400 group-hover:text-cyan-300 transition-colors duration-300">
+                  <span className="mr-2">Continue Reading</span>
+                  <span className="inline-block group-hover:translate-x-1 transition-transform duration-300">
+                    →
+                  </span>
+                </div>
               </NavLink>
             </div>
           ))}
         </div>
       </div>
+
+      <style>{`
+        @keyframes cardEntrance {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes textShine {
+          0% {
+            background-position: 0% 50%;
+          }
+          100% {
+            background-position: 100% 50%;
+          }
+        }
+
+        .animate-text-shine {
+          background-size: 200% auto;
+          animation: textShine 3s linear infinite;
+        }
+      `}</style>
     </div>
   );
 };

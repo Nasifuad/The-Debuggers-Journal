@@ -2,114 +2,124 @@ import { NavLink } from "react-router-dom";
 import SideMenu from "./SideMenu";
 import { navigation } from "../constants/constant";
 import { FaUserCircle } from "react-icons/fa";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { MyContext } from "../useContext/UseContext";
+import { motion } from "framer-motion";
+
 const Navbar = () => {
   const { currentUser, isLoggedIn } = useContext(MyContext);
-  const [userName, setuserName] = useState("Guest");
-  const [logged, setLogged] = useState(false);
-  useEffect(() => {
-    setuserName(currentUser);
-  }, [currentUser]);
-  useEffect(() => {
-    setLogged(isLoggedIn);
-  }, [isLoggedIn]);
+
   const handleLogout = (e) => {
     e.preventDefault();
-    setuserName("Guest");
-    setLogged(false);
+    // Add actual logout logic here
   };
+
   return (
-    <>
-      <header className="sticky top-0  border-b border-gray-200 bg-white z-50 rounded">
-        <div className=" absolute top-5 left-5 flex gap-2 justify-center items-center">
-          <FaUserCircle className="text-2xl" />
-          <span className="text-lg font-semibold">{userName}</span>
-        </div>
-        <nav
-          aria-label="Global"
-          className="flex items-center justify-between p-6 lg:px-8"
-        >
-          <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only text-black">The Debugger`s Journal</span>
-              <img
-                alt=""
-                src="https://www.svgrepo.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                className="h-8 w-auto"
-              />
-            </a>
-          </div>
-          <div className="flex lg:hidden">
-            <button
-              type="button"
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-            >
-              <span className="sr-only">Open main menu</span>
-            </button>
-          </div>
-          <div className="hidden lg:flex lg:gap-x-12">
-            {navigation.map((item) => (
-              <NavLink
+    <header className="sticky top-0 bg-white/5 backdrop-blur-lg border-b border-white/10 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative h-16 flex items-center justify-between">
+          {/* User Info */}
+          <motion.div
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            className="flex items-center gap-2"
+          >
+            <FaUserCircle className="text-2xl text-blue-400" />
+            <span className="text-lg font-semibold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              {currentUser || "Guest"}
+            </span>
+          </motion.div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center space-x-8">
+            {navigation.map((item, index) => (
+              <motion.div
                 key={item.name}
-                to={item.to}
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-sm/6 font-semibold text-white bg-blue-900 px-3 py-2 rounded-lg hover:bg-neutral-800 hover:text-gray-1"
-                    : "text-sm/6 font-semibold text-gray-200 bg-neutral-600 px-3 py-2 rounded-lg hover:bg-neutral-800 hover:text-gray-1"
-                }
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: index * 0.1 }}
               >
-                {item.name}
-              </NavLink>
+                <NavLink
+                  to={item.to}
+                  className={({ isActive }) =>
+                    `px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
+                      isActive
+                        ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg"
+                        : "text-gray-300 hover:bg-white/5 hover:text-white"
+                    }`
+                  }
+                >
+                  {item.name}
+                </NavLink>
+              </motion.div>
             ))}
+          </nav>
+
+          {/* Auth Buttons */}
+          <div className="hidden lg:flex items-center gap-4">
+            <motion.div
+              initial={{ x: 20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+            >
+              {isLoggedIn ? (
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-md hover:shadow-lg transition-all duration-300"
+                >
+                  Log Out
+                </button>
+              ) : (
+                <div className="flex gap-4">
+                  <NavLink
+                    to="/login"
+                    className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-md hover:shadow-lg transition-all duration-300"
+                  >
+                    Log In
+                  </NavLink>
+                  <NavLink
+                    to="/signup"
+                    className="px-4 py-2 border border-white/20 text-white rounded-md hover:bg-white/5 transition-all duration-300"
+                  >
+                    Sign Up
+                  </NavLink>
+                </div>
+              )}
+            </motion.div>
           </div>
 
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
-            {logged ? (
-              <NavLink
-                onClick={(e) => handleLogout(e)}
-                className="text-sm/6 font-semibold text-gray-200 bg-red-600 px-3 py-2 rounded-lg hover:bg-neutral-800 hover:text-gray-1"
-              >
-                Log Out <span aria-hidden="true">&rarr;</span>
-              </NavLink>
-            ) : (
-              <>
-                <NavLink
-                  to="/login"
-                  className={({ isActive }) =>
-                    isActive
-                      ? "text-sm/6 font-semibold text-white bg-blue-900 px-3 py-2 rounded-lg hover:bg-neutral-800 hover:text-gray-1"
-                      : "text-sm/6 font-semibold text-gray-200 bg-neutral-600 px-3 py-2 rounded-lg hover:bg-neutral-800 hover:text-gray-1"
-                  }
+          {/* Mobile Search */}
+          <div className="lg:hidden absolute left-1/2 transform -translate-x-1/2 w-3/4 max-w-md">
+            <div className="relative flex items-center bg-white/5 rounded-full px-4 py-2 backdrop-blur-sm">
+              <input
+                type="text"
+                placeholder="Search articles..."
+                className="w-full bg-transparent border-none text-white placeholder-gray-400 focus:ring-0"
+              />
+              <button className="ml-2 p-1.5 bg-blue-500 rounded-full hover:bg-blue-400 transition-colors">
+                <svg
+                  className="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  Log In <span aria-hidden="true">&rarr;</span>
-                </NavLink>
-                <NavLink
-                  to="/signup"
-                  className={({ isActive }) =>
-                    isActive
-                      ? "text-sm/6 font-semibold text-white bg-blue-900 px-3 py-2 rounded-lg hover:bg-neutral-800 hover:text-gray-1"
-                      : "text-sm/6 font-semibold text-gray-200 bg-neutral-600 px-3 py-2 rounded-lg hover:bg-neutral-800 hover:text-gray-1"
-                  }
-                >
-                  Sign Up <span aria-hidden="true">&rarr;</span>
-                </NavLink>
-              </>
-            )}
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
-        </nav>
-        <div className="xl:hidden bg-slate-200 w-1/2 flex border border-slate-700 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <input
-            type="text"
-            name=""
-            id=""
-            className="w-full px-4 border-none outline-none  py-2"
-          />
-          <button className="bg-slate-700 text-white rou px-2 ">Search</button>
+
+          {/* Mobile Menu */}
+          <div className="lg:hidden">
+            <SideMenu navigation={navigation} />
+          </div>
         </div>
-      </header>
-      <SideMenu navigation={navigation} />
-    </>
+      </div>
+    </header>
   );
 };
 
