@@ -20,7 +20,7 @@ const CreateBlog = () => {
   const sendBlog = async () => {
     try {
       const res = await fetch(
-        "https://the-debuggers-journal-backend.onrender.com/createBlog",
+        "https://the-debuggers-journal-backend.onrender.com/api/createBlog",
         {
           method: "POST",
           headers: {

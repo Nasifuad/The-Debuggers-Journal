@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { images } from "../constants/constant";
 import { useNavigate } from "react-router-dom";
 import { MyContext } from "../useContext/UseContext";
+import { motion } from "framer-motion";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -55,18 +56,57 @@ const Signup = () => {
     }
   };
 
+  // Animation Variants
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
+  const inputVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.5, delay: 0.2 } },
+  };
+
+  const buttonVariants = {
+    hover: { scale: 1.05, transition: { duration: 0.2 } },
+    tap: { scale: 0.95 },
+  };
+
+  const imageVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.5, delay: 0.3 },
+    },
+  };
+
+  const successVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-transparent p-6">
-      <h1 className="text-4xl font-semibold text-gray-800 mb-6">Sign Up</h1>
-      <div className="bg-white shadow-lg rounded-lg flex overflow-hidden w-full max-w-4xl">
-        <img
+    <motion.div
+      className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-6"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <h1 className="text-4xl font-semibold text-white mb-6">Sign Up</h1>
+      <motion.div
+        className="bg-white shadow-2xl rounded-lg flex overflow-hidden w-full max-w-4xl"
+        variants={containerVariants}
+      >
+        <motion.img
           src={images.signup}
           alt="Sign up"
           className="w-1/2 hidden md:block object-cover"
+          variants={imageVariants}
         />
         <div className="w-full md:w-1/2 p-8">
           <form className="space-y-4" onSubmit={handleSubmit}>
-            <div>
+            <motion.div variants={inputVariants}>
               <label className="block text-gray-700 font-medium">
                 Username
               </label>
@@ -74,26 +114,26 @@ const Signup = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full p-2 border rounded-md"
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter username"
                 required
               />
               {errors.username && (
                 <p className="text-red-500 text-sm">{errors.username}</p>
               )}
-            </div>
-            <div>
+            </motion.div>
+            <motion.div variants={inputVariants}>
               <label className="block text-gray-700 font-medium">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-2 border rounded-md"
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter email"
                 required
               />
-            </div>
-            <div>
+            </motion.div>
+            <motion.div variants={inputVariants}>
               <label className="block text-gray-700 font-medium">
                 Password
               </label>
@@ -101,15 +141,15 @@ const Signup = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-2 border rounded-md"
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter password"
                 required
               />
               {errors.password && (
                 <p className="text-red-500 text-sm">{errors.password}</p>
               )}
-            </div>
-            <div>
+            </motion.div>
+            <motion.div variants={inputVariants}>
               <label className="block text-gray-700 font-medium">
                 Confirm Password
               </label>
@@ -117,38 +157,52 @@ const Signup = () => {
                 type="password"
                 value={passwordConfirm}
                 onChange={(e) => setPasswordConfirm(e.target.value)}
-                className="w-full p-2 border rounded-md"
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Confirm password"
                 required
               />
               {errors.passwordConfirm && (
                 <p className="text-red-500 text-sm">{errors.passwordConfirm}</p>
               )}
-            </div>
-            <button
+            </motion.div>
+            <motion.button
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
             >
               Sign Up
-            </button>
+            </motion.button>
           </form>
           {userExists && (
-            <p className="text-red-500 text-sm mt-2">User already exists</p>
+            <motion.p
+              className="text-red-500 text-sm mt-2"
+              variants={successVariants}
+            >
+              User already exists
+            </motion.p>
           )}
           {success && (
-            <p className="text-green-500 text-sm mt-2">
+            <motion.p
+              className="text-green-500 text-sm mt-2"
+              variants={successVariants}
+            >
               User created successfully
-            </p>
+            </motion.p>
           )}
-          <button
+          <motion.button
             onClick={() => navigate("/login")}
             className="mt-4 text-blue-600 hover:underline"
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
           >
             Already have an account? Log in
-          </button>
+          </motion.button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

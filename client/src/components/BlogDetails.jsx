@@ -62,7 +62,7 @@ const BlogDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-700 text-white p-8">
+    <div className="min-h-screen max-h-full bg-gradient-to-br from-gray-900 to-gray-700 text-white p-8">
       <div className="max-w-4xl mx-auto">
         <h1
           className="underline cursor-pointer text-xl font-bold mb-8"
@@ -82,7 +82,7 @@ const BlogDetails = () => {
         </div>
 
         <div className="prose prose-lg prose-invert max-w-none">
-          <p className="text-gray-300 leading-relaxed">
+          <p className="text-white font-italic text-lg mb-8 text-justify leading-relaxed ">
             {data?.content || "No content available."}
           </p>
         </div>

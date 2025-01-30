@@ -38,7 +38,7 @@ const BlogPage = () => {
   return (
     <div className=" bg-gradient-to-br  from-blue-900 via-gray-900 to-sky-600 text-white py-10 px-4">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-6xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 animate-text-shine sticky top-10 z-10 py-8 backdrop-blur-lg">
+        <h1 className="text-6xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 animate-text-shine sticky top-10 z-10 py-8 backdrop-blur-lg hidden xl:block">
           The Debuggers Journal
         </h1>
 
