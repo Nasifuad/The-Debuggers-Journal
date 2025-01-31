@@ -5,10 +5,10 @@ import fs from "fs";
 dotenv.config({ path: "./cloud.env" });
 
 // Debug environment variables
-console.log("Environment Variables:");
-console.log("Cloud Name:", process.env.CLOUD_NAME);
-console.log("Cloud API Key:", process.env.CLOUD_API_KEY);
-console.log("Cloud API Secret:", process.env.CLOUD_API_SECRET);
+// console.log("Environment Variables:");
+// console.log("Cloud Name:", process.env.CLOUD_NAME);
+// console.log("Cloud API Key:", process.env.CLOUD_API_KEY);
+// console.log("Cloud API Secret:", process.env.CLOUD_API_SECRET);
 
 // Configure Cloudinary
 cloudinary.config({
@@ -18,7 +18,7 @@ cloudinary.config({
 });
 
 // Debug Cloudinary configuration
-console.log("Cloudinary Config:", cloudinary.config());
+// console.log("Cloudinary Config:", cloudinary.config());
 
 /**
  * Uploads a file to Cloudinary.
