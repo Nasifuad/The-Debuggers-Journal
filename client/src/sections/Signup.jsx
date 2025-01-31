@@ -10,6 +10,8 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [avatar, setAvatar] = useState(null);
+  const [coverImage, setCoverImage] = useState(null);
   const [errors, setErrors] = useState({});
   const [userExists, setUserExists] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -31,18 +33,23 @@ const Signup = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    const newUserData = { username, email, password };
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("password", password);
+    if (avatar) formData.append("avatar", avatar);
+    if (coverImage) formData.append("coverImage", coverImage);
+
     try {
       const res = await fetch(
-        "https://the-debuggers-journal-backend.onrender.com/api/signup",
+        "https://backend-debuggersjournal.vercel.app/api/v1/user/register",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newUserData),
+          body: formData,
         }
       );
       const result = await res.json();
-
+      console.log("Final result", result);
       if (result.message === "User created successfully") {
         setSuccess(true);
         setCurrentUser(result.data.username);
@@ -88,28 +95,25 @@ const Signup = () => {
 
   return (
     <motion.div
-      className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-6"
+      className="flex flex-col items-center justify-center min-h-screen p-6"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       <h1 className="text-4xl font-semibold text-white mb-6">Sign Up</h1>
       <motion.div
-        className="bg-white shadow-2xl rounded-lg flex overflow-hidden w-full max-w-4xl"
+        className="shadow-xl rounded-lg flex overflow-hidden justify-center items-center w-full max-w-4xl"
         variants={containerVariants}
       >
         <motion.img
           src={images.signup}
           alt="Sign up"
-          className="w-1/2 hidden md:block object-cover"
+          className="w-1/2 hidden xl:block object-cover"
           variants={imageVariants}
         />
-        <div className="w-full md:w-1/2 p-8">
+        <div className="w-3/4 xl:w-1/2 p-8 flex flex-col justify-center">
           <form className="space-y-4" onSubmit={handleSubmit}>
             <motion.div variants={inputVariants}>
-              <label className="block text-gray-700 font-medium">
-                Username
-              </label>
               <input
                 type="text"
                 value={username}
@@ -123,7 +127,6 @@ const Signup = () => {
               )}
             </motion.div>
             <motion.div variants={inputVariants}>
-              <label className="block text-gray-700 font-medium">Email</label>
               <input
                 type="email"
                 value={email}
@@ -134,9 +137,6 @@ const Signup = () => {
               />
             </motion.div>
             <motion.div variants={inputVariants}>
-              <label className="block text-gray-700 font-medium">
-                Password
-              </label>
               <input
                 type="password"
                 value={password}
@@ -149,10 +149,8 @@ const Signup = () => {
                 <p className="text-red-500 text-sm">{errors.password}</p>
               )}
             </motion.div>
+
             <motion.div variants={inputVariants}>
-              <label className="block text-gray-700 font-medium">
-                Confirm Password
-              </label>
               <input
                 type="password"
                 value={passwordConfirm}
@@ -164,6 +162,29 @@ const Signup = () => {
               {errors.passwordConfirm && (
                 <p className="text-red-500 text-sm">{errors.passwordConfirm}</p>
               )}
+            </motion.div>
+            <motion.div variants={inputVariants}>
+              <label className="block text-gray-200 font-medium mb-2">
+                Upload your avatar
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setAvatar(e.target.files[0])}
+                className="w-full bg-gray-500 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </motion.div>
+            <motion.div variants={inputVariants}>
+              <label className="block text-gray-200 font-medium mb-2">
+                Upload your cover
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setCoverImage(e.target.files[0])}
+                className="w-full bg-gray-500 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </motion.div>
             <motion.button
               type="submit"
@@ -198,7 +219,8 @@ const Signup = () => {
             whileHover="hover"
             whileTap="tap"
           >
-            Already have an account? Log in
+            Already have an account?{" "}
+            <span className="underline text-white">Log in</span>
           </motion.button>
         </div>
       </motion.div>
