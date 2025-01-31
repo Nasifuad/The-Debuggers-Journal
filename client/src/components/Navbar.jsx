@@ -15,7 +15,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 bg-white/5 backdrop-blur-lg border-b border-white/10 z-50">
+    <header className="sticky top-0 backdrop-blur-lg  z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative h-16 flex items-center justify-between">
           {/* User Info */}

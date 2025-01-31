@@ -19,16 +19,15 @@ const LoginPage = () => {
     setIsPasswordError(password.length < 6);
 
     // If there is any error, stop further processing
-    if (isNameError || isPasswordError) {
-      return;
+    if (!isNameError && !isPasswordError) {
+      handleLogin();
+
+      // Clear inputs
+      setName("");
+      setPassword("");
     }
 
     // If validation passes, handle login
-    handleLogin();
-
-    // Clear inputs
-    setName("");
-    setPassword("");
   };
 
   const handleLogin = async () => {
@@ -117,11 +116,13 @@ const LoginPage = () => {
         </span>
       </h1>
       <div className="w-full flex justify-center items-center ">
-        <div>
-          <img src={images.login} alt="login" className="w-[500px]" />
-        </div>
+        <img
+          src={images.login}
+          alt="login"
+          className="w-[500px] hidden xl:block h-[500px]"
+        />
 
-        <div className=" w-1/2 h-[500px] flex justify-center items-center flex-col">
+        <div className=" xl:w-1/2 w-full h-[500px] flex justify-center items-center flex-col">
           <form
             className="flex flex-col w-1/2"
             onSubmit={(e) => handleSubmit(e)}
@@ -178,14 +179,14 @@ const LoginPage = () => {
             <br />
             <button
               type="submit"
-              className="bg-blue-900 px-4 py-2 text-white rounded-md hover:bg-blue-800 font-mono"
+              className="bg-blue-500 px-4 py-2 text-white rounded-md hover:bg-blue-800 font-mono"
             >
               Login
             </button>
           </form>
           <button
             type="submit"
-            className=" px-4 py-2 text-black rounded-md font-mono"
+            className=" px-4 py-2 text-gray-200 rounded-md font-mono"
           >
             Forget Password?
           </button>
