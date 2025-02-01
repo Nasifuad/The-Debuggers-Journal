@@ -7,7 +7,7 @@ import { MyContext } from "../useContext/UseContext";
 import { motion } from "framer-motion";
 
 const Navbar = () => {
-  const { currentUser, isLoggedIn } = useContext(MyContext);
+  const { currentUser, isLoggedIn, avatar } = useContext(MyContext);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -26,10 +26,18 @@ const Navbar = () => {
             animate={{ x: 0, opacity: 1 }}
             className="flex items-center gap-2"
           >
-            <FaUserCircle className="text-2xl text-blue-400" />
-            <span className="text-lg font-semibold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            {!avatar ? (
+              <FaUserCircle className="text-2xl text-blue-400" />
+            ) : (
+              <img src={avatar} alt="User" className="w-8 h-8 rounded-full" />
+            )}
+
+            <NavLink
+              to="/profile"
+              className="text-lg font-semibold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent"
+            >
               {currentUser || "Guest"}
-            </span>
+            </NavLink>
           </motion.div>
 
           {/* Desktop Navigation */}

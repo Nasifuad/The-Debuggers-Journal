@@ -15,7 +15,11 @@ const Signup = () => {
   const [errors, setErrors] = useState({});
   const [userExists, setUserExists] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { setCurrentUser, setIsLoggedIn } = useContext(MyContext);
+  const {
+    setCurrentUser,
+    setIsLoggedIn,
+    setAvatar: setAvatarContext,
+  } = useContext(MyContext);
 
   const validateForm = () => {
     let newErrors = {};
@@ -51,9 +55,16 @@ const Signup = () => {
       const result = await res.json();
       console.log("Final result", result);
       if (result.message === "User created successfully") {
+        console.log("If condition is fulfilled");
         setSuccess(true);
         setCurrentUser(result.data.username);
         setIsLoggedIn(true);
+        setAvatarContext(result.data.avatar);
+        setCoverImage(result.data.coverImage);
+        localStorage.setItem("currentUser", result.data.username);
+        localStorage.setItem("isLoggedIn", JSON.stringify(true));
+        localStorage.setItem("coverImage", result.data.coverImage);
+        localStorage.setItem("avatar", result.data.avatar);
         setTimeout(() => navigate("/"), 2000);
       } else {
         setUserExists(true);
