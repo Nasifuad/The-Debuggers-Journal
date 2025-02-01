@@ -1,10 +1,11 @@
-import express, { urlencoded } from "express";
+import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { router } from "./routes/user.route.js";
+
 export const app = express();
 
-//middlewares
+// Middlewares
 const allowedOrigins = [
   "http://localhost:5173",
   "https://the-debuggers-journal-e2f6.vercel.app",
@@ -13,6 +14,7 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
+      console.log("Incoming origin:", origin); // Log the incoming origin
       if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true); // Allow the request
       } else {
@@ -22,16 +24,12 @@ app.use(
     credentials: true,
   })
 );
-app.use(
-  express.json({
-    limit: "50mb",
-    extended: true,
-  })
-);
-app.use(urlencoded({ limit: "50mb", extended: true }));
+
+app.use(express.json({ limit: "500mb" }));
+app.use(express.urlencoded({ limit: "500mb", extended: true }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-//routes
+// Routes
 app.get("/", (req, res) => res.send("Hello World!"));
 app.use("/api/v1/user", router);
