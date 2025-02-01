@@ -19,6 +19,7 @@ const Signup = () => {
     setCurrentUser,
     setIsLoggedIn,
     setAvatar: setAvatarContext,
+    setCoverImage: setCoverImageContext,
   } = useContext(MyContext);
 
   const validateForm = () => {
@@ -45,13 +46,10 @@ const Signup = () => {
     if (coverImage) formData.append("coverImage", coverImage);
 
     try {
-      const res = await fetch(
-        "https://backend-debuggersjournal.vercel.app/api/v1/user/register",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const res = await fetch("http://localhost:8080/api/v1/user/register", {
+        method: "POST",
+        body: formData,
+      });
       const result = await res.json();
       console.log("Final result", result);
       if (result.message === "User created successfully") {
@@ -60,7 +58,7 @@ const Signup = () => {
         setCurrentUser(result.data.username);
         setIsLoggedIn(true);
         setAvatarContext(result.data.avatar);
-        setCoverImage(result.data.coverImage);
+        setCoverImageContext(result.data.coverImage);
         localStorage.setItem("currentUser", result.data.username);
         localStorage.setItem("isLoggedIn", JSON.stringify(true));
         localStorage.setItem("coverImage", result.data.coverImage);

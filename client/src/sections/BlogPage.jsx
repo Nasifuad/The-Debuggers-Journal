@@ -13,6 +13,8 @@ const BlogPage = () => {
         "https://the-debuggers-journal-backend.onrender.com/api/blogs"
       );
       if (!response.ok) throw new Error("Failed to fetch blogs");
+      // const data = await response.json();
+      // setBlogs(data);
       return response.json();
     },
   });

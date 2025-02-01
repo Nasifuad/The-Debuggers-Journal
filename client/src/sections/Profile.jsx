@@ -2,12 +2,29 @@ import { useContext } from "react";
 import { MyContext } from "../useContext/UseContext";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import { FaEdit, FaLinkedin, FaGithub, FaTwitter } from "react-icons/fa";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("John Doe");
   const { currentUser, coverImage, avatar, setAvatar } = useContext(MyContext);
+  const {
+    data: blogs,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["blogs"],
+    queryFn: async () => {
+      const response = await fetch(
+        "https://the-debuggers-journal-backend.onrender.com/api/blogs"
+      );
+      if (!response.ok) throw new Error("Failed to fetch blogs");
+      const data = await response.json();
+      setBlogs(data);
+      return response.json();
+    },
+  });
   const [bio, setBio] = useState(
     "Full Stack Developer | Open Source Enthusiast"
   );
@@ -36,23 +53,23 @@ const Profile = () => {
 
   return (
     <motion.div
-      className="min-h-screen bg-gradient-to-br from-gray-500 to-indigo-600 flex  justify-center p-6"
+      className="min-h-screen  flex  justify-center p-6 "
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className="bg-white rounded-2xl shadow-2xl overflow-hidden w-full max-w-4xl"
+        className="bg-white rounded-2xl shadow-2xl overflow-hidden w-full max-w-4xl "
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <div className="relative">
-          <div className="h-48 bg-gradient-to-r from-blue-400 to-purple-500">
+          <div className="h-[300px] bg-gradient-to-r from-blue-400 to-purple-500 ">
             <img
               src={coverImage}
               alt="cover"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-center object-cover"
             />
           </div>
           <div className="absolute -bottom-16 left-6">
@@ -84,7 +101,7 @@ const Profile = () => {
             </motion.div>
           </div>
         </div>
-        <div className="p-6 mt-16">
+        <div className="p-6 mt-16 border-b-2 border-gray-200 shadow-lg">
           <div className="flex justify-between items-center">
             <motion.h1
               className="text-3xl font-bold text-gray-800"

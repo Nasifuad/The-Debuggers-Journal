@@ -42,29 +42,26 @@ import { Consumer } from "../models/user.model.js";
 export const userRegister = AsynchHandler(async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    console.log("Multer files:", req.files);
+    // console.log("Multer files:", req.files.originalName);
 
     // Check if avatar file exists
     if (!req.files?.avatar || req.files.avatar.length === 0) {
       throw new ApiError(400, "Avatar is required");
     }
 
-    // Upload avatar to Cloudinary
     const avatarBuffer = req.files.avatar[0].buffer;
     const avatar = await uploadCloudinary(avatarBuffer);
 
-    // Upload cover image to Cloudinary (if provided)
-    // let coverImage = null;
-    // if (req.files?.coverImage && req.files.coverImage.length > 0) {
-    //   const coverImageBuffer = req.files.coverImage[0].buffer;
-    //   coverImage = await uploadCloudinary(coverImageBuffer);
-    // }
-    const coverImageBuffer = req.files?.coverImage[0]?.buffer;
-    coverImage = await uploadCloudinary(coverImageBuffer);
+    const coverImageBuffer = req.files.coverImage[0].buffer;
+    console.log("coverImageBuffer", coverImageBuffer);
+    const coverImage = await uploadCloudinary(coverImageBuffer);
 
-    // Check for successful upload on Cloudinary
     if (!avatar) {
       throw new ApiError(400, "Avatar upload failed");
+    }
+
+    if (!coverImage) {
+      throw new ApiError(400, "Cover image upload failed");
     }
 
     // Create new user
@@ -72,14 +69,14 @@ export const userRegister = AsynchHandler(async (req, res) => {
       username,
       email,
       password: password.toString(),
-      avatar: avatar.url, // Save Cloudinary URL
-      coverImage: coverImage.url, // Save Cloudinary URL (if exists)
+      avatar: avatar.url,
+      coverImage: coverImage.url,
     });
 
     res
       .status(201)
       .json({ message: "User created successfully", data: newUser });
   } catch (error) {
-    throw new ApiError(500, error.message || "Internal Server Error");
+    throw new ApiError(200, error);
   }
 });

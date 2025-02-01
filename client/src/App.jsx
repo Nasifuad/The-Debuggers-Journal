@@ -8,6 +8,7 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
+  const [blogs, setBlogs] = useState(null);
   // Retrieve data from localStorage on page load
   useEffect(() => {
     const storedUser = localStorage.getItem("currentUser");
@@ -38,6 +39,8 @@ const App = () => {
         setAvatar,
         coverImage,
         setCoverImage,
+        blogs,
+        setBlogs,
       }}
     >
       <RouterProvider router={router} />
