@@ -54,11 +54,13 @@ export const userRegister = AsynchHandler(async (req, res) => {
     const avatar = await uploadCloudinary(avatarBuffer);
 
     // Upload cover image to Cloudinary (if provided)
-    let coverImage = null;
-    if (req.files?.coverImage && req.files.coverImage.length > 0) {
-      const coverImageBuffer = req.files.coverImage[0].buffer;
-      coverImage = await uploadCloudinary(coverImageBuffer);
-    }
+    // let coverImage = null;
+    // if (req.files?.coverImage && req.files.coverImage.length > 0) {
+    //   const coverImageBuffer = req.files.coverImage[0].buffer;
+    //   coverImage = await uploadCloudinary(coverImageBuffer);
+    // }
+    const coverImageBuffer = req.files?.coverImage[0]?.buffer;
+    coverImage = await uploadCloudinary(coverImageBuffer);
 
     // Check for successful upload on Cloudinary
     if (!avatar) {
@@ -71,7 +73,7 @@ export const userRegister = AsynchHandler(async (req, res) => {
       email,
       password: password.toString(),
       avatar: avatar.url, // Save Cloudinary URL
-      coverImage: coverImage ? coverImage.url : null, // Save Cloudinary URL (if exists)
+      coverImage: coverImage.url, // Save Cloudinary URL (if exists)
     });
 
     res
