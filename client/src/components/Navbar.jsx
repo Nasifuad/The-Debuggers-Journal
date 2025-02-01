@@ -11,7 +11,9 @@ const Navbar = () => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    // Add actual logout logic here
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("isLoggedIn");
+    window.location.reload();
   };
 
   return (
