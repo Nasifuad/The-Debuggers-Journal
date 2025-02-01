@@ -7,8 +7,8 @@ export const app = express();
 
 // Middlewares
 const allowedOrigins = [
-  "http://localhost:5173",
   "https://the-debuggers-journal-e2f6.vercel.app",
+  "http://localhost:5173",
 ];
 
 app.use(
