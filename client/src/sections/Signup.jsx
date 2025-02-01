@@ -46,10 +46,13 @@ const Signup = () => {
     if (coverImage) formData.append("coverImage", coverImage);
 
     try {
-      const res = await fetch("http://localhost:8080/api/v1/user/register", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        "https://the-debuggers-journal-backend.onrender.com/api/v1/user/register",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       const result = await res.json();
       console.log("Final result", result);
       if (result.message === "User created successfully") {
