@@ -5,9 +5,20 @@ import { router } from "./routes/user.route.js";
 export const app = express();
 
 //middlewares
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://your-production-domain.com",
+];
+
 app.use(
   cors({
-    origin: "localhost:5173" || "*",
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true); // Allow the request
+      } else {
+        callback(new Error("Not allowed by CORS")); // Block the request
+      }
+    },
     credentials: true,
   })
 );
